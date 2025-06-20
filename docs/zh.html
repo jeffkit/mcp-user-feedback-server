@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP 用户反馈服务器 - AI 智能体的人机交互解决方案</title>
+    <meta name="description" content="一个 Model Context Protocol 服务器，让 AI 智能体能够通过系统对话框与用户交互。完美适用于实现人机协作工作流。">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .code-block {
+            background: #2d3748;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+    
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <a href="index.html" class="bg-white text-purple-600 px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 font-medium">
+            <i class="fas fa-language mr-2"></i>English
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="gradient-bg text-white">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-comments text-3xl"></i>
+                    <h1 class="text-2xl font-bold">MCP 用户反馈服务器</h1>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://github.com/jeff_kit/mcp-user-feedback-server" target="_blank" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all duration-300">
+                        <i class="fab fa-github mr-2"></i>GitHub
+                    </a>
+                    <a href="https://www.npmjs.com/package/mcp-user-feedback-server" target="_blank" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all duration-300">
+                        <i class="fab fa-npm mr-2"></i>NPM
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="container mx-auto px-6 py-20 text-center">
+            <h2 class="text-5xl font-bold mb-6">AI 智能体的人机交互解决方案</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">让您的 AI 智能体能够通过原生系统对话框与用户交互。完美适用于在 Cursor 和 Claude Desktop 等 MCP 兼容应用中实现人机协作工作流。</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#quick-start" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-rocket mr-2"></i>快速开始
+                </a>
+                <a href="#demo" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300">
+                    <i class="fas fa-play mr-2"></i>查看演示
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-gray-800 mb-4">为什么选择 MCP 用户反馈服务器？</h3>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">使用我们强大的 MCP 服务器无缝连接 AI 自动化与人工输入。</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-xl border border-blue-100">
+                    <div class="text-blue-600 text-4xl mb-4">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800">跨平台支持</h4>
+                    <p class="text-gray-600">在 macOS、Linux 和 Windows 上无缝运行，集成原生系统对话框。</p>
+                </div>
+                
+                <div class="feature-card bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-xl border border-green-100">
+                    <div class="text-green-600 text-4xl mb-4">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800">轻松集成</h4>
+                    <p class="text-gray-600">简单的一行 NPM 安装和配置，兼容任何 MCP 客户端。</p>
+                </div>
+                
+                <div class="feature-card bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-xl border border-purple-100">
+                    <div class="text-purple-600 text-4xl mb-4">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800">人机协作</h4>
+                    <p class="text-gray-600">让 AI 智能体在执行过程中暂停并请求实时用户输入。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quick-start" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-gray-800 mb-4">快速开始</h3>
+                <p class="text-xl text-gray-600">不到 2 分钟即可运行</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800">
+                        <i class="fas fa-download text-blue-600 mr-3"></i>安装
+                    </h4>
+                    <div class="code-block">
+                        <pre class="text-sm"><code class="language-bash">npx mcp-user-feedback-server@latest</code></pre>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800">
+                        <i class="fas fa-cog text-green-600 mr-3"></i>配置
+                    </h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="text-lg font-semibold mb-3 text-gray-700">Cursor IDE</h5>
+                            <div class="code-block">
+                                <pre class="text-sm"><code class="language-json">{
+  "mcpServers": {
+    "user-feedback": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-user-feedback-server@latest"
+      ]
+    }
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="text-lg font-semibold mb-3 text-gray-700">Claude Desktop</h5>
+                            <div class="code-block">
+                                <pre class="text-sm"><code class="language-json">{
+  "mcpServers": {
+    "user-feedback": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-user-feedback-server@latest"
+      ]
+    }
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-gray-800 mb-4">实际应用演示</h3>
+                <p class="text-xl text-gray-600">人机协作工作流的真实案例</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto space-y-8">
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 border border-blue-200">
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800">示例 1：简单用户输入</h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-gray-700 mb-2">对话</h5>
+                            <div class="bg-white rounded-lg p-4 border">
+                                <p class="text-sm text-gray-600 mb-2"><strong>用户：</strong>问我最喜欢的编程语言是什么</p>
+                                <p class="text-sm text-gray-600"><strong>AI：</strong>我来问您最喜欢的编程语言。</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-gray-700 mb-2">工具使用</h5>
+                            <div class="code-block">
+                                <pre class="text-sm"><code class="language-json">{
+  "question": "您最喜欢的编程语言是什么？",
+  "title": "用户偏好"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-8 border border-green-200">
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800">示例 2：带默认值的表单输入</h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-gray-700 mb-2">对话</h5>
+                            <div class="bg-white rounded-lg p-4 border">
+                                <p class="text-sm text-gray-600 mb-2"><strong>用户：</strong>获取我的通知邮箱偏好</p>
+                                <p class="text-sm text-gray-600"><strong>AI：</strong>让我询问您的首选通知邮箱。</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-gray-700 mb-2">工具使用</h5>
+                            <div class="code-block">
+                                <pre class="text-sm"><code class="language-json">{
+  "question": "请输入您的首选通知邮箱：",
+  "title": "邮箱设置",
+  "defaultAnswer": "user@example.com"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Details -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-gray-800 mb-4">技术详情</h3>
+                <p class="text-xl text-gray-600">采用现代技术构建，确保可靠性和性能</p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800">
+                        <i class="fas fa-tools text-blue-600 mr-3"></i>技术栈
+                    </h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-600 mr-3"></i>
+                            <span>TypeScript 类型安全</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-600 mr-3"></i>
+                            <span>Model Context Protocol SDK</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-600 mr-3"></i>
+                            <span>原生系统对话框 API</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-600 mr-3"></i>
+                            <span>跨平台兼容性</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800">
+                        <i class="fas fa-shield-alt text-green-600 mr-3"></i>平台支持
+                    </h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fab fa-apple text-xl mr-3"></i>
+                                <span>macOS</span>
+                            </div>
+                            <span class="text-green-600 font-semibold">原生支持</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fab fa-linux text-xl mr-3"></i>
+                                <span>Linux</span>
+                            </div>
+                            <span class="text-green-600 font-semibold">Zenity/KDialog</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fab fa-windows text-xl mr-3"></i>
+                                <span>Windows</span>
+                            </div>
+                            <span class="text-green-600 font-semibold">VBScript</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-4xl font-bold mb-6">准备好开始了吗？</h3>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">加入全球开发者的行列，使用 MCP 用户反馈服务器构建更好的人机协作应用。</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://github.com/jeff_kit/mcp-user-feedback-server" target="_blank" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+                    <i class="fab fa-github mr-2"></i>查看 GitHub
+                </a>
+                <a href="https://www.npmjs.com/package/mcp-user-feedback-server" target="_blank" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-all duration-300">
+                    <i class="fab fa-npm mr-2"></i>从 NPM 安装
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h4 class="text-xl font-bold mb-4">MCP 用户反馈服务器</h4>
+                    <p class="text-gray-300">通过 Model Context Protocol 实现无缝的人机协作。</p>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-4">快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://github.com/jeff_kit/mcp-user-feedback-server" class="text-gray-300 hover:text-white transition-colors">GitHub 仓库</a></li>
+                        <li><a href="https://www.npmjs.com/package/mcp-user-feedback-server" class="text-gray-300 hover:text-white transition-colors">NPM 包</a></li>
+                        <li><a href="https://modelcontextprotocol.io/" class="text-gray-300 hover:text-white transition-colors">MCP 文档</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-bold mb-4">联系我们</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://github.com/jeff_kit/mcp-user-feedback-server" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-github text-2xl"></i>
+                        </a>
+                        <a href="https://www.npmjs.com/package/mcp-user-feedback-server" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-npm text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-300">&copy; 2024 MCP 用户反馈服务器。MIT 许可证。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll indicator
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('scrollIndicator').style.transform = `scaleX(${scrolled / 100})`;
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
