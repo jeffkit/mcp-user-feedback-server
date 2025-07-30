@@ -1,6 +1,6 @@
 {
   "name": "mcp-user-feedback-server",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "MCP server with user feedback tool that shows dialog boxes",
   "type": "module",
   "main": "dist/index.js",
@@ -29,15 +29,15 @@
     "ai",
     "assistant"
   ],
-  "author": "jeff_kit",
+  "author": "jeffkit",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jeff_kit/mcp-user-feedback-server.git"
+    "url": "git+https://github.com/jeffkit/mcp-user-feedback-server.git"
   },
-  "homepage": "https://github.com/jeff_kit/mcp-user-feedback-server#readme",
+  "homepage": "https://github.com/jeffkit/mcp-user-feedback-server#readme",
   "bugs": {
-    "url": "https://github.com/jeff_kit/mcp-user-feedback-server/issues"
+    "url": "https://github.com/jeffkit/mcp-user-feedback-server/issues"
   },
   "files": [
     "dist/",

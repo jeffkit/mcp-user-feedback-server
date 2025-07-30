@@ -7,8 +7,9 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 class TestClient {
   private client: Client;
   private transport: StdioClientTransport;
+  private serverArgs: string[];
 
-  constructor() {
+  constructor(serverArgs: string[] = []) {
     this.client = new Client(
       {
         name: 'test-client',
@@ -21,15 +22,20 @@ class TestClient {
       }
     );
 
+    this.serverArgs = serverArgs;
+
     // 创建传输层，使用本地编译好的服务器
     this.transport = new StdioClientTransport({
       command: 'node',
-      args: ['dist/index.js'],
+      args: ['dist/index.js', ...this.serverArgs],
     });
   }
 
   async startServer() {
     console.log('🚀 启动 MCP User Feedback Server...');
+    if (this.serverArgs.length > 0) {
+      console.log(`   参数: ${this.serverArgs.join(' ')}`);
+    }
     
     // 连接客户端（会自动启动传输层）
     await this.client.connect(this.transport);
@@ -113,6 +119,35 @@ class TestClient {
     }
   }
 
+  async testTimeoutParameter() {
+    console.log('\n⏱️ 测试超时参数...');
+    console.log('   (请等待对话框显示，然后不要操作它，等待超时)');
+    
+    try {
+      const response = await this.client.callTool({
+        name: 'request_user_feedback',
+        arguments: {
+          question: '这个对话框将在设置的超时时间后自动关闭。请不要点击任何按钮，等待超时。',
+          title: '超时测试',
+          defaultAnswer: ''
+        }
+      }) as CallToolResult;
+      
+      console.log('   响应:', response);
+      
+      if (response.isError) {
+        console.log('   ✅ 对话框已正确超时');
+      } else {
+        console.log('   ❓ 对话框未超时，可能是用户手动关闭了对话框');
+      }
+      
+      return response;
+    } catch (error) {
+      console.error('   ❌ 测试超时参数失败:', error);
+      throw error;
+    }
+  }
+
   async cleanup() {
     console.log('\n🧹 清理资源...');
     
@@ -131,7 +166,7 @@ class TestClient {
     }
   }
 
-  async runTests() {
+  async runTests(includeTimeoutTest: boolean = false) {
     try {
       await this.startServer();
       
@@ -143,6 +178,10 @@ class TestClient {
       if (tools.length > 0) {
         await this.testRequestUserFeedback();
         await this.testMultipleFeedbacks();
+        
+        if (includeTimeoutTest) {
+          await this.testTimeoutParameter();
+        }
       }
       
       console.log('\n🎉 所有测试完成！');
@@ -155,8 +194,31 @@ class TestClient {
   }
 }
 
+// 解析命令行参数
+function parseArgs() {
+  const args = process.argv.slice(2);
+  const serverArgs: string[] = [];
+  let testTimeout = false;
+  
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--test-timeout') {
+      testTimeout = true;
+    } else if (args[i] === '--server-timeout' && i + 1 < args.length) {
+      serverArgs.push('--timeout', args[i + 1]);
+      i++; // 跳过值参数
+    } else {
+      serverArgs.push(args[i]);
+    }
+  }
+  
+  return { serverArgs, testTimeout };
+}
+
+// 解析命令行参数
+const { serverArgs, testTimeout } = parseArgs();
+
 // 运行测试
-const testClient = new TestClient();
+const testClient = new TestClient(serverArgs);
 
 // 处理进程退出
 process.on('SIGINT', async () => {
@@ -172,7 +234,7 @@ process.on('uncaughtException', async (error) => {
 });
 
 // 启动测试
-testClient.runTests().catch(async (error) => {
+testClient.runTests(testTimeout).catch(async (error) => {
   console.error('💥 测试启动失败:', error);
   await testClient.cleanup();
   process.exit(1);

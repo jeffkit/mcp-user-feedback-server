@@ -28,6 +28,23 @@ npm install
 npm run build
 ```
 
+## Command Line Options
+
+The server supports the following command line options:
+
+| Option | Alias | Description |
+|--------|-------|-------------|
+| --timeout | -t | Set dialog timeout in seconds (default: 600 seconds / 10 minutes) |
+
+Example:
+```bash
+# Set timeout to 5 minutes (300 seconds)
+npx mcp-user-feedback-server --timeout 300
+
+# Using the short form
+npx mcp-user-feedback-server -t 300
+```
+
 ## MCP Client Configuration
 
 ### Cursor IDE
@@ -42,6 +59,24 @@ Add this to your Cursor settings in the MCP servers configuration:
       "args": [
         "-y",
         "mcp-user-feedback-server@latest"
+      ]
+    }
+  }
+}
+```
+
+To set a custom timeout:
+
+```json
+{
+  "mcpServers": {
+    "user-feedback": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-user-feedback-server@latest",
+        "--timeout",
+        "300"
       ]
     }
   }
@@ -141,8 +176,8 @@ AI: I've noted your preferred email for notifications.
 ### Platform-specific Implementation
 
 - **macOS**: Uses AppleScript with `osascript`
-- **Linux**: Uses `zenity` or `kdialog` (requires GUI environment)
-- **Windows**: Uses VBScript with `cscript`
+- **Linux**: Uses `zenity`, `kdialog`, `yad`, or `xmessage` (requires GUI environment)
+- **Windows**: Uses PowerShell or VBScript (fallback)
 
 ## System Requirements
 
@@ -150,16 +185,17 @@ AI: I've noted your preferred email for notifications.
 - No additional dependencies required
 
 ### Linux
-- Requires `zenity` (GNOME/GTK) or `kdialog` (KDE)
+- Requires one of: `zenity` (GNOME/GTK), `kdialog` (KDE), `yad`, or `xmessage`
 - Install zenity: `sudo apt-get install zenity` (Ubuntu/Debian)
 
 ### Windows
-- No additional dependencies required (uses built-in VBScript)
+- No additional dependencies required
 
 ## Error Handling
 
 The tool handles various error scenarios:
 - User cancellation
+- Dialog timeout
 - Missing GUI environment
 - Platform-specific dialog failures
 
@@ -170,9 +206,13 @@ The project structure:
 src/
 ├── index.ts      # Main MCP server
 ├── dialog.ts     # Cross-platform dialog manager
+docs/
+├── FEEDBACK_PROTOCOL.md # Feedback protocol documentation
 ```
 
 ## License
 
 MIT
+
+import { read_file } from 'fs';
 
