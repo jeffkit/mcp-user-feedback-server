@@ -126,6 +126,49 @@ If you're developing locally, you can also run the server directly:
 }
 ```
 
+## Best Practices: Using with Cursor Rules
+
+This MCP server works best when combined with proper rules or prompts in your AI assistant configuration. This ensures the AI consistently uses the feedback tool to verify its work rather than making assumptions.
+
+### Recommended Cursor Rule
+
+Add this rule to your Cursor configuration for optimal user feedback integration:
+
+```markdown
+**Feedback Protocol**  
+
+**Core Rule:** Always use the `request_user_feedback` tool to verify your work - never assume you got it right.  
+
+### **When to Request Feedback:**  
+1. **When You Need Clarification**  
+   - If any part of the request is unclear or missing details  
+   - Example: *"Should I focus more on [A] or [B] for this analysis?"*  
+
+2. **When You Complete a Task**  
+   - After delivering any result, big or small  
+   - Example: *"Here's the draft: [summary]. Does this meet your needs?"*  
+
+**How to Use the Tool Properly:**  
+- Always phrase requests clearly and specifically  
+- Offer options when possible (e.g., "Should I use approach X or Y?")  
+- Never proceed without getting explicit confirmation  
+
+**Golden Rule:** Your work isn't done until the user says "This is exactly what I needed." Keep improving until you hear those words.
+```
+
+### How to Add the Rule in Cursor
+
+1. Open Cursor IDE
+2. Go to **settings** > **rules & memory** > **user rules**
+3. Add the above feedback protocol rule
+4. Save the configuration
+
+This ensures your AI assistant will:
+- Ask for clarification when requirements are unclear
+- Verify completed work before moving on
+- Use the dialog boxes to get real-time feedback
+- Follow up until you confirm satisfaction
+
 ## Tool: request_user_feedback
 
 Shows a dialog box to request feedback from the user.

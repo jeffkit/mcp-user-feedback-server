@@ -91,6 +91,49 @@ npm run build
 }
 ```
 
+## 最佳实践：与 Cursor 规则结合使用
+
+MCP 服务器在与适当的规则或提示结合使用时效果最佳。这确保了 AI 始终使用反馈工具来验证其工作，而不是做出假设。
+
+### 推荐 Cursor 规则
+
+在 Cursor 配置中添加此规则以实现最佳的用户反馈集成：
+
+```markdown
+**Feedback Protocol**  
+
+**Core Rule:** Always use the `request_user_feedback` tool to verify your work - never assume you got it right.  
+
+### **When to Request Feedback:**  
+1. **When You Need Clarification**  
+   - If any part of the request is unclear or missing details  
+   - Example: *"Should I focus more on [A] or [B] for this analysis?"*  
+
+2. **When You Complete a Task**  
+   - After delivering any result, big or small  
+   - Example: *"Here's the draft: [summary]. Does this meet your needs?"*  
+
+**How to Use the Tool Properly:**  
+- Always phrase requests clearly and specifically  
+- Offer options when possible (e.g., "Should I use approach X or Y?")  
+- Never proceed without getting explicit confirmation  
+
+**Golden Rule:** Your work isn't done until the user says "This is exactly what I needed." Keep improving until you hear those words.
+```
+
+### 如何添加规则 in Cursor
+
+1. 打开 Cursor IDE
+2. 转到 **settings** > **rules & memory** > **user rules**
+3. 添加上述反馈协议规则
+4. 保存配置
+
+这确保了您的 AI 助手将：
+- 在要求不明确时请求澄清
+- 在完成任务后验证其工作
+- 使用对话框获取实时反馈
+- 跟进直到您确认满意
+
 ## 工具：request_user_feedback
 
 显示对话框以请求用户反馈。
